@@ -7,17 +7,19 @@ const NewUserForm = ({values, errors, touched, status}) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if (status) { 
-      setUsers([...users, [status.name, status.email, status.password, status.role].join(", ")])
+    if (status) {
+      setUsers([...users, [status.name, status.email, status.password, status.role]])
     }
   },[status])
  
   return (
+    
     <div>
       <Form>
+
         <div>
           {touched.name && errors.name && <p>{errors.name}</p>}
-          <Field type="text" name="name" placeholder="Name"/>
+          <Field type="name" name="name" placeholder="Name"/>
         </div>
 
         <div>
@@ -31,7 +33,7 @@ const NewUserForm = ({values, errors, touched, status}) => {
         </div>
 
         <label>
-          {errors.role && <p>{errors.role}</p>}
+          {touched.role && errors.role && <p>{errors.role}</p>}
           {"Role:  "}
           <Field component="select" name="role">
             <option value=""></option>
@@ -52,7 +54,7 @@ const NewUserForm = ({values, errors, touched, status}) => {
       </Form>
       
       <div>
-        {users.map(user => <p key={user}>{user}</p>)}
+        {users.map(user => <p key={user}>{user.join(", ")}</p>)}
       </div>
     </div>
   );
@@ -61,14 +63,13 @@ const NewUserForm = ({values, errors, touched, status}) => {
 
 const FormikUserForm = withFormik({
 
-
-
-  mapPropsToValues(name, email, password, tos, role) {
+  mapPropsToValues({email, password, tos, role, name}) {
     return { 
-      name: name || "",
       email: email || "",
+      name: name || "",
       password: password || "",
-      tos: tos || false
+      tos: tos || false,
+      role: role || ""
     };  
   },
 
